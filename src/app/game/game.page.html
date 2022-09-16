@@ -18,56 +18,60 @@
 <ion-content>
   <div class="game-wrapper size-{{gameSize}}"
     [class.isDragging]="isDragging">
-    <h3 class="title">
 
-    </h3>
+    <div class="table-top">
 
-    <div class="flex-container game-board"
-      padding
-      (dragover)="dragOver($event)"
-      (dragend)="dragEnd($event)">
-      <ng-container *ngFor="let row of gameBoard; let r=index">
+      <div class="grid-container game-board"
+        padding
+        (dragover)="dragOver($event)"
+        (dragend)="dragEnd($event)">
+        <ng-container *ngFor="let row of gameBoard; let r=index">
+          <div class="board"
+            *ngFor="let letter of row; let c=index">
+            <div class="board-tile"
+              (dragenter)="dragEnter($event)"
+              (dragleave)="dragLeave($event)"
+              (drop)="drop($event, 'board', r, c)"
+              (dragstart)="dragStart($event, 'board', r, c, letter)"
+              [draggable]="letter!='*'">
+              <img [src]="url(letter)"
+                [alt]="letter"
+                class="tile-image">
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="grid-container game-board"
+        *ngIf="!gameOver"
+        (drop)="drop($event, 'shelf')"
+        (dragenter)="dragEnter($event)"
+        (dragleave)="dragLeave($event)"
+        (dragover)="dragOver($event)">
         <div class="flex-cell board"
-          *ngFor="let letter of row; let c=index">
-          <div class="flex-item board-tile"
-            (dragenter)="dragEnter($event)"
-            (dragleave)="dragLeave($event)"
-            (drop)="drop($event, 'board', r, c)"
-            (dragstart)="dragStart($event, 'board', r, c, letter)"
-            [draggable]="letter!='*'">
-            <img [src]="url(letter)"
-              [alt]="letter"
-              class="tile-image">
+          *ngFor="let e of letters; let i=index">
+          <div class="flex-item board-tile">
+            <div (dragstart)="dragStart($event, 'shelf', i, -1, e)"
+              [draggable]="true">
+              <img [src]="url(e)"
+                [alt]="e"
+                class="tile-image">
+            </div>
           </div>
         </div>
-      </ng-container>
+      </div>
+
+      <div class="title"
+        *ngIf="gameOver">
+        <h2>You Win!</h2>
+        <ion-button size="large"
+          color="primary"
+          (click)="nextLevel()">Next Game</ion-button>
+      </div>
     </div>
 
-    <div *ngIf="!gameOver"
-      class="shelf"
-      (drop)="drop($event, 'shelf')"
-      (dragenter)="dragEnter($event)"
-      (dragleave)="dragLeave($event)"
-      (dragover)="dragOver($event)">
-      <ng-container *ngFor="let e of letters; let i=index">
-        <div class="tile">
-          <div (dragstart)="dragStart($event, 'shelf', i, -1, e)"
-            [draggable]="true">
-            <img [src]="url(e)"
-              [alt]="e"
-              class="tile-image">
-          </div>
-        </div>
-      </ng-container>
-    </div>
-    <div class="title"
-      *ngIf="gameOver">
-      <h2>You Win!</h2>
-      <ion-button size="large"
-        color="primary"
-        (click)="nextLevel()">Next Game</ion-button>
-    </div>
   </div>
+
   <ion-fab *ngIf="!gameOver"
     vertical="bottom"
     horizontal="end"
