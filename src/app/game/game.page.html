@@ -42,13 +42,13 @@
         </ng-container>
       </div>
 
-      <div class="grid-container game-board"
+      <div class="shelf-container game-board"
         *ngIf="!gameOver"
         (drop)="drop($event, 'shelf')"
         (dragenter)="dragEnter($event)"
         (dragleave)="dragLeave($event)"
         (dragover)="dragOver($event)">
-        <div class="flex-cell board"
+        <div class="flex-cell"
           *ngFor="let e of letters; let i=index">
           <div class="flex-item board-tile">
             <div (dragstart)="dragStart($event, 'shelf', i, -1, e)"
