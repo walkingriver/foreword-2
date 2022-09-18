@@ -14,9 +14,19 @@
 // For Landscape orientation
 @media screen and (orientation: landscape) {
   .table-top {
-    grid-template-columns: repeat(2, 77vh);
     justify-content: space-evenly;
     grid-template-rows: 1fr;
+  }
+
+  @media screen and (max-height: 450px) {
+    .table-top {
+      grid-template-columns: repeat(2, 77vh);
+    }
+  }
+  @media screen and (min-height: 451px) {
+    .table-top {
+      grid-template-columns: 3fr 2fr;
+    }
   }
 
   .shelf-container {
