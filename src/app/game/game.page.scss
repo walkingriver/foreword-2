@@ -1,17 +1,22 @@
+// All rules regardless of orientation
+.table-top {
+  display: grid;
+  column-gap: 10px;
+  row-gap: 10px;
+  padding-top: 10px;
+  box-sizing: border-box;
+}
+
+.game-board {
+  display: block;
+}
+
 // For Landscape orientation
 @media screen and (orientation: landscape) {
   .table-top {
-    display: grid;
     grid-template-columns: repeat(2, 77vh);
     justify-content: space-evenly;
     grid-template-rows: 1fr;
-    column-gap: 10px;
-    padding-top: 10px;
-    box-sizing: border-box;
-  }
-
-  .game-board {
-    display: block;
   }
 
   .shelf-container {
@@ -26,11 +31,6 @@
     max-height: 75vh;
   }
 
-  .tiles {
-    display: flex;
-    flex-flow: row wrap;
-  }
-
   .grid-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -40,12 +40,30 @@
 
 // For portrait orientation
 @media screen and (orientation: portrait) {
+  .table-top {
+    grid-template-rows: 3fr 1fr;
+    justify-content: space-evenly;
+  }
 
+  .shelf-container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+
+  .flex-cell {
+    padding: 2px;
+  }
 }
 
-
 .flex-cell {
-  padding: 0.5rem;
   box-sizing: border-box;
 }
 
@@ -56,4 +74,9 @@
 
 .tile-image {
   width: 100%; // height: 90%;
+}
+
+.tiles {
+  display: flex;
+  flex-flow: row wrap;
 }
