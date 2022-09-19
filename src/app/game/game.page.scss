@@ -1,40 +1,94 @@
-
-.flex-container {
-  display: flex;
-  justify-content: start;
-  flex-wrap: wrap;
-}
-
-.flex-cell {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  padding: 0.5rem;
+// All rules regardless of orientation
+.table-top {
+  display: grid;
+  column-gap: 10px;
+  row-gap: 10px;
+  padding-top: 10px;
   box-sizing: border-box;
 }
 
-.size-3 .flex-cell {
-  flex: 0 0 33.33%;
+.game-board {
+  display: block;
 }
 
-.size-4 .flex-cell {
-  flex: 0 0 25%;
+.grid-container {
+  display: grid;
 }
 
-.size-5 .flex-cell {
-  flex: 0 0 20%;
+.size-4 .grid-container {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
 }
 
-.flex-cell:before {
-  content: '';
-  display: table;
-  padding-top: 100%;
+.size-3 .grid-container {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
 }
 
-.flex-item {
-  flex-grow: 1;
+// For Landscape orientation
+@media screen and (orientation: landscape) {
+  .table-top {
+    justify-content: space-evenly;
+    grid-template-rows: 1fr;
+  }
 
+  @media screen and (max-height: 450px) {
+    .table-top {
+      grid-template-columns: repeat(2, 77vh);
+    }
+  }
+
+  @media screen and (min-height: 451px) {
+    .table-top {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+
+  .size-4 .shelf-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+
+  .size-3 .shelf-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
+}
+
+// For portrait orientation
+@media screen and (orientation: portrait) {
+  .table-top {
+    // grid-template-rows: 3fr 1fr;
+    justify-content: space-evenly;
+  }
+
+  .shelf-container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .flex-cell {
+    padding: 2px;
+  }
+}
+
+.flex-cell {
+  box-sizing: border-box;
+}
+
+.tile {
+  flex-shrink: 1;
+  display: block;
+}
+
+.tile-image {
+  width: 100%; // height: 90%;
+}
+
+.tiles {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-flow: row wrap;
 }
