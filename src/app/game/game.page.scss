@@ -44,10 +44,16 @@
     }
   }
 
-  .shelf-container {
+  .size-4 .shelf-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
+  }
+
+  .size-3 .shelf-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
   }
 }
 
