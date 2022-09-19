@@ -23,6 +23,7 @@
       grid-template-columns: repeat(2, 77vh);
     }
   }
+
   @media screen and (min-height: 451px) {
     .table-top {
       grid-template-columns: 3fr 2fr;
@@ -51,7 +52,7 @@
 // For portrait orientation
 @media screen and (orientation: portrait) {
   .table-top {
-    grid-template-rows: 3fr 1fr;
+    // grid-template-rows: 3fr 1fr;
     justify-content: space-evenly;
   }
 
