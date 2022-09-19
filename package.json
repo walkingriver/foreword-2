@@ -2,7 +2,8 @@
   "name": "foreword",
   "version": "22.09.18",
   "author": "Michael Callaghan",
-  "homepage": "http://walkingriver.com/",  "scripts": {
+  "homepage": "http://walkingriver.com/",
+  "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
