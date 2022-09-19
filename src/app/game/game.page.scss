@@ -11,6 +11,20 @@
   display: block;
 }
 
+.grid-container {
+  display: grid;
+}
+
+.size-4 .grid-container {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.size-3 .grid-container {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
 // For Landscape orientation
 @media screen and (orientation: landscape) {
   .table-top {
@@ -35,18 +49,6 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
   }
-
-  .shelf {
-    display: block;
-    max-width: 50%;
-    max-height: 75vh;
-  }
-
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-  }
 }
 
 // For portrait orientation
@@ -60,13 +62,6 @@
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(2, 1fr);
-  }
-
-
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
   }
 
   .flex-cell {

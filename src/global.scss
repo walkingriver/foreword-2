@@ -76,8 +76,7 @@ ion-content {
   text-align: center;
 }
 
-.game-board,
-.shelf {
+.game-board {
   background-image: url(assets/images/wood-bg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -92,8 +91,6 @@ ion-content {
   // width: 20vw;
   border-radius: 12px;
 }
-
-
 
 .isDragging .hover {
   -webkit-box-shadow: 0px 0px 15px 5px rgba(255, 255, 190, .75);
