@@ -44,7 +44,7 @@
 
       <div class="shelf-container game-board"
         *ngIf="!gameOver"
-        (drop)="drop($event, 'shelf')"
+        (drop)="drop($event, 'shelf', 0, 0)"
         (dragenter)="dragEnter($event)"
         (dragleave)="dragLeave($event)"
         (dragover)="dragOver($event)">
