@@ -3,11 +3,18 @@ import { Injectable } from '@angular/core';
 import { Puzzle } from './puzzle';
 import { games4 } from './games-4';
 import { games3 } from './games-3';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+  private currentPuzzle: Puzzle;
+
+  getCurrentPuzzle(): Puzzle {
+    return this.currentPuzzle;
+  }
+
   getByLevel(size: number, level: number): Puzzle {
     const puzzles = {
       3: games3,
@@ -15,9 +22,10 @@ export class GameService {
       // 5: games5
     };
 
-    const puzzle = puzzles[size][level];
-    puzzle.level = level;
-    return puzzle;
+    this.currentPuzzle = puzzles[size][level];
+    this.currentPuzzle.level = level;
+
+    return this.currentPuzzle;
   }
 
   getPuzzleCount(): number {
@@ -32,8 +40,9 @@ export class GameService {
     return Preferences.set({ key: 'foreword-highest-level', value: JSON.stringify(progress) });
   }
 
-  getHighestLevel(): Promise<any> {
-    return Preferences.get({ key: 'foreword-highest-level' });
+  async getHighestLevel(): Promise<any> {
+    const entry = await Preferences.get({ key: 'foreword-highest-level' });
+    return JSON.parse(entry.value);
   }
 
   // private allPuzzles(): Puzzle[] {

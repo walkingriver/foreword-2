@@ -31,6 +31,7 @@ export class GamePage implements OnInit {
     ['*', '*', '*', '*'],
   ];
 
+  hintsActive = false;
   isDragging = false;
   gameOver: boolean;
   isRecycling: boolean;
@@ -46,6 +47,7 @@ export class GamePage implements OnInit {
     private platform: Platform,
     private router: Router,
     route: ActivatedRoute) {
+    this.puzzle = route.snapshot.data.puzzle;
     this.gameSize = route.snapshot.params.order;
   }
 
@@ -53,13 +55,8 @@ export class GamePage implements OnInit {
     await this.platform.ready();
     this.isiOS = this.platform.is('ios');
     this.loadSounds();
-    const progress = (await this.games.getHighestLevel()) || { 3: 0, 4: 0, 5: 0 };
-    let nextLevel = 0;
-    if (progress[this.gameSize]) {
-      nextLevel = progress[this.gameSize] + 1;
-    }
-    this.loadLevel(nextLevel);
-    // this.newGame();
+
+    this.newGame();
   }
 
   async loadSounds(): Promise<void> {
@@ -70,9 +67,10 @@ export class GamePage implements OnInit {
     this.shuffleSound = new Audio('./assets/sounds/shuffle.wav');
   }
 
- loadLevel(level: number) {
-    this.puzzle = this.games.getByLevel(this.gameSize, level);
-    this.newGame();
+  loadLevel(level: number) {
+    // this.puzzle = this.games.getByLevel(this.gameSize, level);
+    // this.newGame();
+    this.router.navigate(['/game', this.gameSize, level]);
   }
 
   async newGame() {
@@ -102,26 +100,13 @@ export class GamePage implements OnInit {
 
     this.letters = this.puzzle.solution[0].split('').sort();
 
-    // if (this.puzzle.level % 3 === 0) {
-    //   this.launchInterstitial();
-    // }
+    if (this.puzzle.level % 3 === 0) {
+      this.launchInterstitial();
+    }
   }
 
-  // launchInterstitial() {
-  //   const interstitialConfig: AdMobFreeInterstitialConfig = {
-  //     isTesting: this.isDebugging,
-  //     autoShow: true,
-  //     id: this.isiOS
-  //       ? 'ca-app-pub-5422413832537104/6868524515'
-  //       : 'ca-app-pub-5422413832537104/2046732230'
-  //   };
-
-  //   this.admob.interstitial.config(interstitialConfig);
-
-  //   this.admob.interstitial.prepare().then(() => {
-  //     // success
-  //   });
-  // }
+  launchInterstitial() {
+  }
 
   resetGame() {
     if (this.totalMoves) {
@@ -240,9 +225,9 @@ export class GamePage implements OnInit {
     // Set the drag's format and data. Use the event target's id for the data.
     const dropSource = {
       set: source,
-      row: row,
-      col: col,
-      letter: letter
+      row,
+      col,
+      letter
     };
 
     ev.dataTransfer.setData('text/json', JSON.stringify(dropSource));
@@ -252,7 +237,7 @@ export class GamePage implements OnInit {
   dragEnter(ev) {
     ev.preventDefault();
     ev.stopPropagation(); // stop it here to prevent it bubble up
-    const element = <HTMLElement>(ev.currentTarget);
+    const element = ev.currentTarget as HTMLElement;
     if (element) {
       element.classList.add('hover');
     }
@@ -261,7 +246,7 @@ export class GamePage implements OnInit {
 
   dragLeave(ev: DragEvent) {
     ev.stopPropagation(); // stop it here to prevent it bubble up
-    const element = <HTMLElement>(ev.currentTarget);
+    const element = ev.currentTarget as HTMLElement;
     if (element) {
       element.classList.remove('hover');
     }
@@ -282,10 +267,11 @@ export class GamePage implements OnInit {
 
     // Get the data, which is the id of the drop target
     const dropSource = JSON.parse(ev.dataTransfer.getData('text/json'));
-    const dropDest = { set: dest, row: row, col: col };
+    const dropDest = { set: dest, row, col };
     // console.log('Dropped: ', dropSource, dropDest);
 
     await this.swapTiles(dropSource, dropDest);
+    this.hintsActive = false;
 
     this.dragEnd(ev);
 
