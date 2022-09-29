@@ -17,6 +17,7 @@
 
 <ion-content>
   <div class="game-wrapper size-{{gameSize}}"
+    [class.hints-active]="hintsActive"
     [class.isDragging]="isDragging">
 
     <div class="table-top">
@@ -29,13 +30,15 @@
           <div class="board"
             *ngFor="let letter of row; let c=index">
             <div class="board-tile"
+              [class]="hintClasses[r][c]"
               (dragenter)="dragEnter($event)"
               (dragleave)="dragLeave($event)"
               (drop)="drop($event, 'board', r, c)"
               (dragstart)="dragStart($event, 'board', r, c, letter)"
-              [draggable]="letter!='*'">
+              [draggable]="letter!=='*'">
               <img [src]="url(letter)"
-                [alt]="letter"
+                title="Row: {{r}}, Column: {{c}}, Letter: {{letter}}"
+                alt="{{letter}}"
                 class="tile-image">
             </div>
           </div>
@@ -66,64 +69,83 @@
         <h2>You Win!</h2>
         <ion-button size="large"
           color="primary"
-          (click)="nextLevel()">Next Game</ion-button>
+          [routerLink]="['/game', +gameSize, +puzzle.level + 1]">
+          Next Game</ion-button>
+        <ion-button size="large"
+          color="primary"
+          [routerLink]="['/game', +gameSize, 'random']">
+          Random Game</ion-button>
+        <ion-button size="large"
+          [routerLink]="['/home']"
+          color="primary">Home</ion-button>
       </div>
     </div>
 
   </div>
 
-  <ion-fab *ngIf="!gameOver"
-    vertical="bottom"
-    horizontal="end"
-    slot="fixed">
-    <ion-fab-button id="prefs-button">
-      <ion-icon size="mini"
-        md="settings-sharp"
-        ios="settings-outline"
-        color="dark"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button (click)="newGame()"
-        [disabled]="!totalMoves">
+  <ng-container *ngIf="!gameOver">
+    <ion-fab vertical="bottom"
+      horizontal="start"
+      slot="fixed">
+      <ion-fab-button color="primary"
+        (click)="toggleHints(gameBoard, puzzle)">
         <ion-icon color="dark"
-          md="refresh-sharp"
-          ios="refresh-outline"></ion-icon>
+          [name]="hintsActive ? 'eye-off' : 'eye'"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button (click)="nextLevel()"
-        *ngIf="isDebugging">
-        <ion-icon color="dark"
-          md="chevron-forward-sharp"
-          ios="chevron-forward-outline"></ion-icon>
+    </ion-fab>
+
+    <ion-fab vertical="bottom"
+      horizontal="end"
+      slot="fixed">
+      <ion-fab-button id="prefs-button">
+        <ion-icon size="mini"
+          md="settings-sharp"
+          ios="settings-outline"
+          color="dark"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button (click)="prevLevel()"
-        *ngIf="isDebugging">
-        <ion-icon color="dark"
-          md="chevron-back-sharp"
-          ios="chevron-back-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="winLevel()"
-        *ngIf="isDebugging">
-        <ion-icon color="dark"
-          md="arrow-redo-sharp"
-          ios="arrow-redo-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="homePage()">
-        <ion-icon color="dark"
-          md="home-sharp"
-          ios="home-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button *ngIf="isMuted"
-        (click)="isMuted = false">
-        <ion-icon color="dark"
-          md="volume-off-sharp"
-          ios="volume-off-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button *ngIf="!isMuted"
-        (click)="isMuted = true">
-        <ion-icon color="dark"
-          md="volume-high-sharp"
-          ios="volume-high-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
+      <ion-fab-list side="top">
+        <ion-fab-button (click)="newGame()"
+          [disabled]="!totalMoves">
+          <ion-icon color="dark"
+            md="refresh-sharp"
+            ios="refresh-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="isDebugging"
+          [routerLink]="['/game', +gameSize, +puzzle.level + 1]">
+          <ion-icon color="dark"
+            md="chevron-forward-sharp"
+            ios="chevron-forward-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="isDebugging"
+          [routerLink]="['/game', +gameSize, +puzzle.level + 1]">
+          <ion-icon color="dark"
+            md="chevron-back-sharp"
+            ios="chevron-back-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button (click)="winLevel()"
+          *ngIf="isDebugging">
+          <ion-icon color="dark"
+            md="arrow-redo-sharp"
+            ios="arrow-redo-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button (click)="homePage()">
+          <ion-icon color="dark"
+            md="home-sharp"
+            ios="home-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="isMuted"
+          (click)="isMuted = false">
+          <ion-icon color="dark"
+            md="volume-off-sharp"
+            ios="volume-off-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button *ngIf="!isMuted"
+          (click)="isMuted = true">
+          <ion-icon color="dark"
+            md="volume-high-sharp"
+            ios="volume-high-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+  </ng-container>
 </ion-content>

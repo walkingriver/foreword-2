@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Puzzle } from './puzzle';
 import { games4 } from './games-4';
 import { games3 } from './games-3';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +23,20 @@ export class GameService {
 
     this.currentPuzzle = puzzles[size][level];
     this.currentPuzzle.level = level;
+    this.currentPuzzle.rows = this.getRows(this.currentPuzzle.solution[0], size);
+    this.currentPuzzle.columns = this.getColumns(this.currentPuzzle.solution[0], size);
+    this.currentPuzzle.order = size;
 
     return this.currentPuzzle;
   }
 
-  getPuzzleCount(): number {
-    return games4.length;
+  getPuzzleCount(order: number = 4): number {
+    if (order === 4) {
+      return games4.length;
+    } else if (order === 3) {
+      return games3.length;
+    }
+    return 0;
   }
 
   async saveProgress(puzzle: Puzzle, score: number) {
@@ -43,6 +50,26 @@ export class GameService {
   async getHighestLevel(): Promise<any> {
     const entry = await Preferences.get({ key: 'foreword-highest-level' });
     return JSON.parse(entry.value);
+  }
+
+  getRows(arr, size) {
+    const output = [];
+    for (let i = 0; i < size; i++) {
+      output.push(arr.substr(i * size, size));
+    }
+    return output;
+  }
+
+  getColumns(arr, size) {
+    const output = [];
+    for (let i = 0; i < size; i++) {
+      const column = [];
+      for (let j = 0; j < size; j++) {
+        column.push(arr[j * size + i]);
+      }
+      output.push(column.join(''));
+    }
+    return output;
   }
 
   // private allPuzzles(): Puzzle[] {

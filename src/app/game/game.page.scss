@@ -13,6 +13,8 @@
 
 .grid-container {
   display: grid;
+  column-gap: 5px;
+  row-gap: 5px;
 }
 
 .size-4 .grid-container {
@@ -91,4 +93,21 @@
 .tiles {
   display: flex;
   flex-flow: row wrap;
+}
+
+.hints-active {
+  .hint-correct {
+    -webkit-box-shadow: 0px 0px 4px 4px rgba(104, 243, 62, 0.75);
+    -moz-box-shadow: 0px 0px 4px 4px rgba(104, 243, 62, 0.75);
+    box-shadow: 0px 0px 4px 4px rgba(104, 243, 62, 0.75);
+  }
+
+  .hint-close {
+    -webkit-box-shadow: 0px 0px 4px 4px rgba(115, 82, 238, 0.976);
+    -moz-box-shadow: 0px 0px 4px 4px rgba(115, 82, 238, 0.75);
+    box-shadow: 0px 0px 4px 4px rgba(115, 82, 238, 0.75);
+  }
+
+  .hint-incorrect {
+  }
 }

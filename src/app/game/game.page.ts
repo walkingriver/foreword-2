@@ -31,6 +31,13 @@ export class GamePage implements OnInit {
     ['*', '*', '*', '*'],
   ];
 
+  hintClasses = [
+    ['', '', '', ''],
+    ['', '', '', ''],
+    ['', '', '', ''],
+    ['', '', '', ''],
+  ];
+
   hintsActive = false;
   isDragging = false;
   gameOver: boolean;
@@ -89,6 +96,12 @@ export class GamePage implements OnInit {
     const square = this.puzzle.size / this.puzzle.solution.length;
 
     this.gameBoard = [];
+    this.hintClasses = [
+      ['', '', '', ''],
+      ['', '', '', ''],
+      ['', '', '', ''],
+      ['', '', '', ''],
+    ];
 
     for (let i = 0; i < square; i++) {
       const row = [];
@@ -114,14 +127,6 @@ export class GamePage implements OnInit {
     } else {
       this.newGame();
     }
-  }
-
-  nextLevel() {
-    this.loadLevel(this.puzzle.level + 1);
-  }
-
-  prevLevel() {
-    this.loadLevel(this.puzzle.level - 1);
   }
 
   homePage() {
@@ -326,6 +331,71 @@ export class GamePage implements OnInit {
       } catch (e) {
         // It's OK to ignore a sound play error
       }
+    }
+  }
+
+  async toggleHints(gameBoard, puzzle: Puzzle) {
+    this.hintsActive = !this.hintsActive;
+
+    console.table(gameBoard);
+
+    for (let row = 0; row < puzzle.order; row++) {
+      console.log('Puzzle Row: ', puzzle.rows[row]);
+      for (let column = 0; column < puzzle.order; column++) {
+        this.setHintClass(row, column, puzzle, gameBoard[row][column]);
+      }
+    }
+
+    console.table(this.hintClasses);
+  }
+
+  setHintClass(row, column, puzzle, letter) {
+    const isLetter = /[A-Za-z]/.test(letter);
+    if (!isLetter) {
+      this.removeClass(row, column);
+      return;
+    }
+
+    console.log(`Letter at ${row}, ${column} is ${letter}`);
+    console.log(`Letter in puzzle at ${row}, ${column} is ${puzzle.rows[row][column]}`);
+    const puzzleRow = puzzle.rows[row];
+    const puzzleColumn = puzzle.columns[column];
+    console.log('This row is ' + puzzleRow);
+    console.log('This column is ' + puzzleColumn);
+
+    if (!puzzleColumn || !puzzleRow) {
+      // eslint-disable-next-line no-debugger
+      debugger;
+      return;
+    }
+
+    let hintClass = '';
+
+    const isCorrectRow = puzzleRow.includes(letter);
+    const isCorrectColumn = puzzleColumn.includes(letter);
+    const isCorrect = puzzleRow[column] === letter && puzzleColumn[row] === letter;
+
+    if (isCorrect) {
+      console.log('Correct');
+      hintClass = 'hint-correct';
+    } else if (isCorrectRow || isCorrectColumn) {
+      console.log('Close');
+      hintClass = 'hint-close';
+    } else {
+      console.log('Incorrect');
+      hintClass = 'hint-incorrect';
+    }
+
+    this.setClass(row, column, hintClass);
+  }
+
+  removeClass(row, column) {
+    this.hintClasses[row][column] = '';
+  }
+
+  setClass(row, column, className: string) {
+    if (className) {
+      this.hintClasses[row][column] = className;
     }
   }
 }
