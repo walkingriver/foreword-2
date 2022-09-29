@@ -152,7 +152,7 @@ export class GamePage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+            // console.log('Confirm Cancel: blah');
           }
         }, {
           text: 'OK',
@@ -250,6 +250,7 @@ export class GamePage implements OnInit {
   }
 
   dragLeave(ev: DragEvent) {
+    ev.preventDefault();
     ev.stopPropagation(); // stop it here to prevent it bubble up
     const element = ev.currentTarget as HTMLElement;
     if (element) {
@@ -337,16 +338,16 @@ export class GamePage implements OnInit {
   async toggleHints(gameBoard, puzzle: Puzzle) {
     this.hintsActive = !this.hintsActive;
 
-    console.table(gameBoard);
+    // console.table(gameBoard);
 
     for (let row = 0; row < puzzle.order; row++) {
-      console.log('Puzzle Row: ', puzzle.rows[row]);
+      // console.log('Puzzle Row: ', puzzle.rows[row]);
       for (let column = 0; column < puzzle.order; column++) {
         this.setHintClass(row, column, puzzle, gameBoard[row][column]);
       }
     }
 
-    console.table(this.hintClasses);
+    // console.table(this.hintClasses);
   }
 
   setHintClass(row, column, puzzle, letter) {
@@ -356,18 +357,12 @@ export class GamePage implements OnInit {
       return;
     }
 
-    console.log(`Letter at ${row}, ${column} is ${letter}`);
-    console.log(`Letter in puzzle at ${row}, ${column} is ${puzzle.rows[row][column]}`);
+    // console.log(`Letter at ${row}, ${column} is ${letter}`);
+    // console.log(`Letter in puzzle at ${row}, ${column} is ${puzzle.rows[row][column]}`);
     const puzzleRow = puzzle.rows[row];
     const puzzleColumn = puzzle.columns[column];
-    console.log('This row is ' + puzzleRow);
-    console.log('This column is ' + puzzleColumn);
-
-    if (!puzzleColumn || !puzzleRow) {
-      // eslint-disable-next-line no-debugger
-      debugger;
-      return;
-    }
+    // console.log('This row is ' + puzzleRow);
+    // console.log('This column is ' + puzzleColumn);
 
     let hintClass = '';
 
@@ -376,13 +371,13 @@ export class GamePage implements OnInit {
     const isCorrect = puzzleRow[column] === letter && puzzleColumn[row] === letter;
 
     if (isCorrect) {
-      console.log('Correct');
+      // console.log('Correct');
       hintClass = 'hint-correct';
     } else if (isCorrectRow || isCorrectColumn) {
-      console.log('Close');
+      // console.log('Close');
       hintClass = 'hint-close';
     } else {
-      console.log('Incorrect');
+      // console.log('Incorrect');
       hintClass = 'hint-incorrect';
     }
 
